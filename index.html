@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beautiful Font Converter</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --input-bg: #f0f0f0;
+    }
+    [data-theme="dark"] {
+      --bg-color: #1e1e1e;
+      --text-color: #ffffff;
+      --input-bg: #2c2c2c;
+    }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: sans-serif;
+      margin: 2rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    textarea {
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      width: 100%;
+      height: 100px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      padding: 0.5rem;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    p {
+      margin-top: 1.5rem;
+    }
+    .footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-color);
+    }
+    .footer a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .controls select {
+      padding: 0.3rem;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <div class="language-selector">
+      <label for="lang-select">🌐</label>
+      <select id="lang-select">
+        <option value="en">English</option>
+        <option value="ru">Русский</option>
+      </select>
+    </div>
+    <div class="theme-selector">
+      <label for="theme-select">🌓</label>
+      <select id="theme-select">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </div>
+  </div>
+
+  <h1 id="title">Beautiful Font Converter</h1>
+  <textarea id="input" placeholder="Type normal English letters here..."></textarea>
+  <textarea id="output" placeholder="Special fullwidth output..." readonly></textarea>
+
+  <p id="description">This tool is perfect for converting your regular English text into stunning fullwidth characters. Whether you're customizing names and messages on your Minecraft server or looking to add a unique flair to social media posts, this converter makes it fast and easy!</p>
+
+  <div class="footer" id="footer"></div>
+
+  <script>
+    const translations = {
+      en: {
+        title: "Beautiful Font Converter",
+        inputPlaceholder: "Type normal English letters here...",
+        outputPlaceholder: "Special fullwidth output...",
+        description: "This tool is perfect for converting your regular English text into stunning fullwidth characters. Whether you're customizing names and messages on your Minecraft server or looking to add a unique flair to social media posts, this converter makes it fast and easy!",
+        footerPrefix: "Made by <a href=\"https://chat.openai.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ChatGPT</a> & ",
+        footerLinkText: "MatveyKa"
+      },
+      ru: {
+        title: "Преобразователь красивых шрифтов",
+        inputPlaceholder: "Введите обычные английские буквы здесь...",
+        outputPlaceholder: "Результат в красивом шрифте...",
+        description: "Этот инструмент идеально подходит для преобразования обычного английского текста в потрясающие широкие символы. Независимо от того, хотите ли вы настроить имена и сообщения на вашем сервере Minecraft или добавить уникальный штрих к постам в социальных сетях, этот конвертер делает процесс быстрым и легким!",
+        footerPrefix: "Сделано <a href=\"https://chat.openai.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ChatGPT</a> & ",
+        footerLinkText: "MatveyKa"
+      }
+    };
+
+    const langSelect = document.getElementById('lang-select');
+    const themeSelect = document.getElementById('theme-select');
+    const titleEl = document.getElementById('title');
+    const inputEl = document.getElementById('input');
+    const outputEl = document.getElementById('output');
+    const descEl = document.getElementById('description');
+    const footerEl = document.getElementById('footer');
+
+    function setLanguage(lang) {
+      const t = translations[lang];
+      document.documentElement.lang = lang;
+      titleEl.textContent = t.title;
+      inputEl.placeholder = t.inputPlaceholder;
+      outputEl.placeholder = t.outputPlaceholder;
+      descEl.textContent = t.description;
+      footerEl.innerHTML = t.footerPrefix + `<a id=\"matveyka-link\" href=\"https://www.youtube.com/@matveykaone\" target=\"_blank\" rel=\"noopener noreferrer\">${t.footerLinkText}</a>`;
+    }
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    langSelect.addEventListener('change', () => setLanguage(langSelect.value));
+    themeSelect.addEventListener('change', () => setTheme(themeSelect.value));
+
+    // Initialize defaults
+    setLanguage('en');
+    setTheme('light');
+
+    function toFullwidth(str) {
+      return Array.from(str).map(c => {
+        const code = c.charCodeAt(0);
+        if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122)) {
+          return String.fromCharCode(code + 65248);
+        }
+        return c;
+      }).join('');
+    }
+
+    inputEl.addEventListener('input', () => {
+      outputEl.value = toFullwidth(inputEl.value);
+    });
+  </script>
+</body>
+</html>
