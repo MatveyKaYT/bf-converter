@@ -1,2 +1,2 @@
-# bf-converter.github.io
+# bf-converter
 Beautiful Font Converter
